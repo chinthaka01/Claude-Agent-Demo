@@ -205,4 +205,34 @@ struct GameViewModelTests {
         #expect(BalloonColor.orange.points == 30)
         #expect(BalloonColor.purple.points == 50)
     }
+
+    // MARK: - Difficulty
+
+    /// Verifies that starting a game sets the chosen difficulty on the view model.
+    @Test @MainActor
+    func startGameSetsDifficulty() {
+        let viewModel = GameViewModel()
+
+        viewModel.startGame(difficulty: .easy)
+        #expect(viewModel.difficulty == .easy)
+
+        viewModel.startGame(difficulty: .hard)
+        #expect(viewModel.difficulty == .hard)
+    }
+
+    /// Verifies that starting a game without specifying difficulty defaults to medium.
+    @Test @MainActor
+    func startGameDefaultsToMediumDifficulty() {
+        let viewModel = GameViewModel()
+        viewModel.startGame()
+        #expect(viewModel.difficulty == .medium)
+    }
+
+    /// Verifies that each difficulty level has the expected speed multiplier.
+    @Test
+    func difficultySpeedMultipliers() {
+        #expect(Difficulty.easy.speedMultiplier == 0.6)
+        #expect(Difficulty.medium.speedMultiplier == 1.0)
+        #expect(Difficulty.hard.speedMultiplier == 1.6)
+    }
 }

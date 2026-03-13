@@ -41,8 +41,8 @@ struct GameView: View {
 
                 // Show the start screen when the game has not yet begun.
                 if !viewModel.isGameActive && !viewModel.isGameOver {
-                    StartScreenView {
-                        viewModel.startGame()
+                    StartScreenView { difficulty in
+                        viewModel.startGame(difficulty: difficulty)
                     }
 
                     Spacer()
@@ -52,9 +52,10 @@ struct GameView: View {
                 if viewModel.isGameOver {
                     GameOverView(
                         score: viewModel.score,
-                        balloonsPopped: viewModel.balloonsPopped
-                    ) {
-                        viewModel.startGame()
+                        balloonsPopped: viewModel.balloonsPopped,
+                        difficulty: viewModel.difficulty
+                    ) { difficulty in
+                        viewModel.startGame(difficulty: difficulty)
                     }
 
                     Spacer()

@@ -35,6 +35,9 @@ final class GameViewModel {
     /// Number of balloons that fell off the bottom without being popped.
     var balloonsMissed: Int = 0
 
+    /// The current difficulty level, controlling balloon fall speed.
+    var difficulty: Difficulty = .medium
+
     // MARK: - Configuration
 
     /// The game ends when this many balloons escape unpopped.
@@ -91,12 +94,13 @@ final class GameViewModel {
         lastSpawnDate = date
 
         let xPosition = Double.random(in: 0.1...0.9)
+        let baseFallSpeed = Double.random(in: 0.08...0.18)
         let balloon = Balloon(
             id: UUID(),
             balloonColor: BalloonColor.allCases.randomElement() ?? .red,
             x: xPosition,
             y: -0.05,
-            fallSpeed: Double.random(in: 0.08...0.18),
+            fallSpeed: baseFallSpeed * difficulty.speedMultiplier,
             swayAmplitude: Double.random(in: 0.02...0.06),
             swayFrequency: Double.random(in: 1.5...3.0),
             swayPhase: Double.random(in: 0...(2 * .pi)),
@@ -242,8 +246,10 @@ final class GameViewModel {
 
     // MARK: - Game Control
 
-    /// Start or restart the game.
-    func startGame() {
+    /// Start or restart the game with the given difficulty level.
+    /// - Parameter difficulty: The difficulty to use for this round. Defaults to `.medium`.
+    func startGame(difficulty: Difficulty = .medium) {
+        self.difficulty = difficulty
         balloons.removeAll()
         popEffects.removeAll()
         arrow.state = .idle

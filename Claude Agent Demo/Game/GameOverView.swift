@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// Displayed when the game ends, showing the final score and a restart button.
+/// Displayed when the game ends, showing the final score and restart options.
 ///
 /// Presents a translucent card with the player's score, the number of
-/// balloons popped, and a "Play Again" button that invokes the `onRestart` closure.
+/// balloons popped, and difficulty selection buttons to start a new game.
 struct GameOverView: View {
     /// The player's final score.
     let score: Int
@@ -11,8 +11,11 @@ struct GameOverView: View {
     /// Total number of balloons the player popped during the game.
     let balloonsPopped: Int
 
-    /// Called when the player taps "Play Again" to reset and start a new game.
-    let onRestart: () -> Void
+    /// The difficulty that was used for the completed game.
+    let difficulty: Difficulty
+
+    /// Called when the player selects a difficulty to restart the game.
+    let onRestart: (Difficulty) -> Void
 
     var body: some View {
         VStack {
@@ -28,14 +31,30 @@ struct GameOverView: View {
             Text("Balloons Popped: \(balloonsPopped)")
                 .font(.headline)
 
-            Button("Play Again", systemImage: "arrow.counterclockwise") {
-                onRestart()
+            Text("Play Again")
+                .font(.headline)
+                .padding(.top)
+
+            ForEach(Difficulty.allCases, id: \.self) { level in
+                Button(level.rawValue, systemImage: level.systemImage) {
+                    onRestart(level)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(tintColor(for: level))
             }
-            .buttonStyle(.borderedProminent)
         }
         .foregroundStyle(.white)
         .padding()
         .background(.ultraThinMaterial)
         .clipShape(.rect(cornerRadius: 20))
+    }
+
+    /// Returns a tint color for each difficulty level.
+    private func tintColor(for difficulty: Difficulty) -> Color {
+        switch difficulty {
+        case .easy: .green
+        case .medium: .orange
+        case .hard: .red
+        }
     }
 }
