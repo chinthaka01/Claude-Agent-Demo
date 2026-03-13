@@ -1,21 +1,9 @@
-//
-//  ContentView.swift
-//  Claude Agent Demo
-//
-//  Created by Chinthaka Perera on 3/13/26.
-//
-
 import SwiftUI
 
+/// Root content view that serves as the app's main entry point into the game.
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        GameView()
     }
 }
 
